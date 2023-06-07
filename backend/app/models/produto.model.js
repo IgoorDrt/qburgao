@@ -53,7 +53,8 @@ ProdutoModel.getAll = result => {
 };
 //Atualizar produto por id
 ProdutoModel.updateById = (produtoId, produto, result) => {
-    sql.query("UPDATE produtos SET nome = ?, valor = ? WHERE idprodutos = ?",[produto.nome, produto.valor, produtoId], (err, res)=>{
+    sql.query("UPDATE produtos SET nome = ?, valor = ? WHERE idprodutos = ?",
+    [produto.nome, produto.valor, produtoId], (err, res)=>{
         if(err){
             console.log("erro: ", err);
             result(null, err);
@@ -61,7 +62,7 @@ ProdutoModel.updateById = (produtoId, produto, result) => {
             result({type: "not_found"}, null);
         } else{
             console.log("Produto atualizaado: ", {idprodutos: produtoId, ...produto});
-            result(null, {idprodutos: idprodutos, ...produto});
+            result(null, {idprodutos: produtoId, ...produto});
         }
     })
 
@@ -69,9 +70,27 @@ ProdutoModel.updateById = (produtoId, produto, result) => {
 };
 //Remover produto por id
 ProdutoModel.remove = (produtoId, result) => {
+    sql.query("DELETE FROM produtos WHERE idprodutos = ?", produtoId,(err, res)=>{
+        if(err){
+            console.log("erro: ", err);
+            result(err, null);
+        }else if(res.affectedRows == 0){
+            result({type: "not_found"}, null);
+        }else{
+            result(null, res);
+        }
+    });
 };
 //Remover todos os produtos
 ProdutoModel.removeAll = (result) => {
+    sql.query("DELETE FROM produtos", produtoId,(err, res)=>{
+        if(err){
+            console.log("erro: ", err);
+            result(err, null);
+        }else{
+            result(null, res);
+        }
+    });
 };
 
 module.exports = ProdutoModel;
