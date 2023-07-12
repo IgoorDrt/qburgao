@@ -1,6 +1,11 @@
 module.exports = app =>{
     const usuarioController = require("../controllers/usuario.controller.js");
 
-    app.post("/singup", usuarioController.signUp);
-    app.post("/singin", usuarioController.signIn);
+    app.post("/signup", usuarioController.signUp);
+    app.post("/signin", usuarioController.signIn);
+    app.get("/usuarios", usuarioController.findAll);
+    app.get("/usuarios/:idUsuario", usuarioController.findById);
+    app.put("/usuarios/:idUsuario", usuarioController.update);
+    app.delete("/usuarios/:idUsuario", usuarioController.delete);
+    
 }

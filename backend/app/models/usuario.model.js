@@ -14,7 +14,7 @@ Usuario.create = (usuario, result)=>{
             result(null, "Usuário criado com sucesso");
         }
     })
-}
+};
 
 Usuario.findByEmail = (emailUsuario, result)=>{
     sql.query("SELECT * FROM usuarios WHERE email = ?", emailUsuario, (err,res)=>{
@@ -26,7 +26,7 @@ Usuario.findByEmail = (emailUsuario, result)=>{
             result({type: "not_found"}, null);
         }
     })
-}
+};
 
 Usuario.findById = (idUsuario, result)=>{
     sql.query("SELECT * FROM usuarios WHERE idusuarios = ?", idUsuario, (err,res)=>{
@@ -38,6 +38,50 @@ Usuario.findById = (idUsuario, result)=>{
             result({type: "not_found"}, null);
         }
     })
-}
+};
+
+Usuario.getAll = result => {
+    sql.query("SELECT * FROM usuarios", (err, res) =>{
+        if (err) {
+            console.log("erro: ", err);
+            result(null, err);
+            return;
+        }
+
+        console.log("usuario: ", res);
+        result(null, res);
+    })
+
+};
+
+Usuario.updateById = (idUsuario, usuario, result) => {
+    sql.query("UPDATE usuarios SET email = ?, senha = ?, tipo = ? WHERE idusuarios = ?",
+    [usuario.email, usuario.senha, usuario.tipo,idUsuario], (err, res)=>{
+        if(err){
+            console.log("erro: ", err);
+            result(null, err);
+        } else if (res.affectedRows == 0){
+            result({type: "not_found"}, null);
+        } else{
+            console.log("Usuario atualizaado: ", {idusuarios: idUsuario, ...usuario});
+            result(null, {idusuarios: idUsuario, ...usuario});
+        }
+    })
+
+
+};
+
+Usuario.remove = (idUsuario, result) => {
+    sql.query("DELETE FROM usuarios WHERE idusuarios = ?", idUsuario,(err, res)=>{
+        if(err){
+            console.log("erro: ", err);
+            result(err, null);
+        }else if(res.affectedRows == 0){
+            result({type: "not_found"}, null);
+        }else{
+            result(null, res);
+        }
+    });
+};
 
 module.exports = Usuario;
