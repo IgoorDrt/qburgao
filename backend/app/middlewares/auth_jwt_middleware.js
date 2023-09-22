@@ -3,12 +3,13 @@ const config = require("../configs/auth.config.js");
 const Usuario = require("../models/usuario.model.js");
 
 verifyToken = (req, res, next)=>{
-    let token = req.headers["x-access-token"];
-    if(!token){
+    const { authorization } = req.headers;
+    if(!authorization){
         return res.status(403).send({
             message: "Não possui token para autenticação."
         });
     } else{
+        const [, token] = authorization.split(' ');
         jwt.verify(token, config.secret, (err, decoded)=>{
             if(err){
                 res.status(401).send({

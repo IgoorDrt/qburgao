@@ -44,13 +44,13 @@ exports.signIn = (req, res) =>{
             let validPassword = bcrypt.compareSync(req.body.senha, data.senha);
             if(!validPassword){
                 res.status(401).send({
-                    acessToken: null,
+                    accessToken: null,
                     message: "Senha inválida!"
                 })
             } else{
                 let token = jwt.sign({id: data.idusuarios}, config.secret, {expiresIn: 86400}); //24h
                 res.status(200).send({
-                    acessToken: token,
+                    accessToken: token,
                     id: data.idusuarios,
                     email: data.email,
                     tipo: data.tipo
