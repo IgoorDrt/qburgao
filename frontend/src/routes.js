@@ -29,7 +29,7 @@ const AppPage = () => {
     if (!isAuthenticated()){
         return <Navigate to="/" replace/>
     }
-    return<Navbar><p>Seja Bem vindo</p></Navbar>;
+    return<div><Navbar/><h1>Seja Bem vindo</h1></div>
     
 }
 
