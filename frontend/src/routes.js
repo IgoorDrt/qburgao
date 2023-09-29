@@ -11,6 +11,8 @@ import ListaProdutos from "./pages/ListaProdutos";
 import ListaPedidos from "./pages/ListaPedidos";
 import ProdutoPedido from "./pages/produto_pedido";
 import ListaProdPed from "./pages/ListagemProdPed";
+import Logout from "./pages/Logout";
+import Navbar from "./components/Navbar";
 
 const LoginPage = () => <Login />;
 const SignUpPage = () => <SignUp />;
@@ -21,12 +23,14 @@ const ListaProdutosPage = () => <ListaProdutos/>
 const ListaPedidosPage = () => <ListaPedidos/>
 const CadastrarProdPedPage = () => <ProdutoPedido/>
 const ListaProdPedPage = () => <ListaProdPed/>
+const LogoutPage = () => <Logout/>
 const NotFoundPage = () => <h1>Page not found.</h1>
 const AppPage = () => {
     if (!isAuthenticated()){
         return <Navigate to="/" replace/>
     }
-    return <h1>App</h1>;
+    return<Navbar><p>Seja Bem vindo</p></Navbar>;
+    
 }
 
 const Rotas = () => (
@@ -46,6 +50,7 @@ const Rotas = () => (
             <Route path='/ListaPedidos' element={<ListaPedidosPage />} />
             <Route path='/CadastroProdPed' element={<CadastrarProdPedPage />} />
             <Route path='/ListaProdPed' element={<ListaProdPedPage />} />
+            <Route path='/logout' element={<LogoutPage />} />
             <Route path='*' element={<NotFoundPage />} />
         </Routes>
     </Router>    

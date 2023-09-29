@@ -10,11 +10,28 @@ const ProdutoPedido = () =>{
     const [observacao, setObservacao] = useState("");
     const [produtos_idprodutos, setprodutos_idprodutos] = useState("");
     const [pedidos_idpedidos, setpedidos_idpedidos] = useState("");
+
+    const [produtos, setTableProdutos] = useState([]);
+    const [pedidos, setTablePedidos] = useState([]);
+
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
     useEffect(()=>{
+        async function getSelect(){
+            try{
+                let response = await api.get('/produtos');
+                setTableProdutos(response.data);
+
+                response = await api.get('/pedidos');
+                setTablePedidos(response.data);
+            }catch(err){
+                setError("Houve um problema ao carregar os selects: "+err);
+            }
+        }
+        getSelect();
+
         if(!id) return;
 
         async function getData(){
@@ -23,10 +40,10 @@ const ProdutoPedido = () =>{
                 setObservacao(data.observacao);
                 setprodutos_idprodutos(data.produtos_idprodutos);
                 setpedidos_idpedidos(data.pedidos_idpedidos);
-
             }catch(err){
                 setError("Houve um problema ao carregar os dados do produto: "+err);
             }
+
         }
         getData();
     }, [id]);
@@ -63,18 +80,23 @@ return (
                 placeholder='Observação'
                 onChange={e=>setObservacao(e.target.value)}
                 />
-                <input
-                value={produtos_idprodutos}
-                type="number"
-                placeholder='Id do produto'
-                onChange={e=>setprodutos_idprodutos(e.target.value)}
-                />
-                <input
-                value={pedidos_idpedidos}
-                type="number"
-                placeholder='Id do pedido'
-                onChange={e=>setpedidos_idpedidos(e.target.value)}
-                />
+                <select onChange={e =>setpedidos_idpedidos(e.target.value)} value={pedidos_idpedidos}>
+                    <option value="">Selecione um Pedido</option>
+                    {pedidos.map(pedido => (
+                        <option key={pedido.idpedidos} value={pedido.idpedidos}>
+                            {pedido.idpedidos}
+                        </option>
+                    ))}
+                </select>
+                
+                <select onChange={e =>setprodutos_idprodutos(e.target.value)} value={produtos_idprodutos}>
+                    <option value="">Selecione um Produto</option>
+                    {produtos.map(produto => (
+                        <option key={produto.idprodutos} value={produto.idprodutos}>
+                            {produto.idprodutos}
+                        </option>
+                    ))}
+                </select>
                 <button type="submit">Cadastrar Pedido do Produto</button>
                 {error && <p>{error}</p>}
 
